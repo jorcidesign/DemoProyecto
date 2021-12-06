@@ -8,12 +8,15 @@ package Clases;
 import Conexiones.Connect;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  *
  * @author jorci
  */
 public class Pedido {
+    
+    
     private int codigo;
     private java.sql.Date fecha;
     private String estado;

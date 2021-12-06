@@ -169,6 +169,7 @@ public class MainFrame extends javax.swing.JFrame {
 
         jScrollPane2.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
 
+        jTable23.setFont(new java.awt.Font("Bahnschrift", 0, 14)); // NOI18N
         jTable23.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
@@ -190,6 +191,7 @@ public class MainFrame extends javax.swing.JFrame {
         });
         jTable23.setToolTipText("");
         jTable23.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        jTable23.setGridColor(new java.awt.Color(255, 255, 255));
         jTable23.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jTable23MouseClicked(evt);
@@ -371,10 +373,10 @@ public class MainFrame extends javax.swing.JFrame {
             String sql = "UPDATE PEDIDO SET ESTADO_PEDIDO ='" + col + "' WHERE ID_PEDIDO ='" + id + "'";
             PreparedStatement pst = conn.prepareStatement(sql);
             ResultSet rs = pst.executeQuery();
-            Acciones.displayTable(jTable23, "select P.FECHA_PEDIDO, P.id_pedido, P.ESTADO_PEDIDO, c.nombres || ' ' || c.apeliidos nombre\n"
-                    + "from pedido P, CLIENTE C\n"
-                    + "WHERE P.ID_CLIENTE = C.ID_CLIENTE");
-            setUpSportColumn(jTable23, jTable23.getColumnModel().getColumn(2));
+//            Acciones.displayTable(jTable23, "select P.FECHA_PEDIDO, P.id_pedido, P.ESTADO_PEDIDO, c.nombres || ' ' || c.apeliidos nombre\n"
+//                    + "from pedido P, CLIENTE C\n"
+//                    + "WHERE P.ID_CLIENTE = C.ID_CLIENTE");
+//            setUpSportColumn(jTable23, jTable23.getColumnModel().getColumn(2));
             pst.executeUpdate();
             pst.close();
             conn.close();
