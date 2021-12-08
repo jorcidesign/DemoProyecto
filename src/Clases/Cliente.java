@@ -19,14 +19,16 @@ public class Cliente {
     private String direccion;
     private String email;
     private int dni;
+    private String status;
 
-    public Cliente(int codigo, String nombre, String apellido, String direccion, String email, int dni) {
+    public Cliente(int codigo, String nombre, String apellido, String direccion, String email, int dni,String status) {
         this.codigo = codigo;
         this.nombre = nombre;
         this.apellido = apellido;
         this.direccion = direccion;
         this.email = email;
         this.dni = dni;
+        this.status = status;
     }
 
     public int getCodigo() {
@@ -76,6 +78,14 @@ public class Cliente {
     public void setDni(int dni) {
         this.dni = dni;
     }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
     
     
     public String toString(){
@@ -85,7 +95,7 @@ public class Cliente {
     //INSERT
     public void registrarCliente() throws Exception{
         Connection conn = Connect.getConnection();
-        String sql = "INSERT INTO CLIENTE VALUES(?, ?, ?, ?, ? ,? )";
+        String sql = "INSERT INTO CLIENTE VALUES(?, ?, ?, ?, ? ,?, ? )";
         PreparedStatement pst = conn.prepareStatement(sql);
         pst.setInt(1, this.codigo);
         pst.setString(2, this.nombre);
@@ -93,6 +103,7 @@ public class Cliente {
         pst.setString(4, this.direccion);
         pst.setString(5, this.email);
         pst.setInt(6, this.dni);
+        pst.setString(7, this.status);
         pst.executeUpdate();
         pst.close();
         conn.close();

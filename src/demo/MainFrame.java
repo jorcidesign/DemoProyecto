@@ -13,6 +13,7 @@ import demo.DetallePedidosFrame;
 import Clases.Pedido;
 import Clases.Producto;
 import Conexiones.Connect;
+import java.awt.Color;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
@@ -40,11 +41,13 @@ public class MainFrame extends javax.swing.JFrame {
     /**
      * Creates new form MainFrame
      */
+    
+    String orderView = "select P.FECHA_REGISTRO, P.id_pedido, P.ESTADO_PEDIDO, c.nombres || ' ' || c.apeliidos nombre\n"
+                + "from pedido P, CLIENTE C\n"
+                + "WHERE P.ID_CLIENTE = C.ID_CLIENTE";
     public MainFrame() {
         initComponents();
-        Acciones.displayTable(jTable23, "select P.FECHA_PEDIDO, P.id_pedido, P.ESTADO_PEDIDO, c.nombres || ' ' || c.apeliidos nombre\n"
-                + "from pedido P, CLIENTE C\n"
-                + "WHERE P.ID_CLIENTE = C.ID_CLIENTE");
+        Acciones.displayTable(jTable23, orderView);
         setUpSportColumn(jTable23, jTable23.getColumnModel().getColumn(2));
     }
 
@@ -164,7 +167,15 @@ public class MainFrame extends javax.swing.JFrame {
 
         jPanel5.add(jPanel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(550, 40, 60, 40));
 
+        busquedaText.setFont(new java.awt.Font("Bahnschrift", 0, 14)); // NOI18N
+        busquedaText.setForeground(new java.awt.Color(153, 153, 153));
+        busquedaText.setText("Ingresa el nombre del producto, cliente");
         busquedaText.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
+        busquedaText.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                busquedaTextMousePressed(evt);
+            }
+        });
         jPanel5.add(busquedaText, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 40, 440, 40));
 
         jScrollPane2.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
@@ -235,7 +246,7 @@ public class MainFrame extends javax.swing.JFrame {
         });
         jPanel9.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jLabel11.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imágenes/Editar.png"))); // NOI18N
+        jLabel11.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imágenes/editStatus.png"))); // NOI18N
         jPanel9.add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
 
         jPanel5.add(jPanel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(840, 30, 50, 50));
@@ -298,9 +309,8 @@ public class MainFrame extends javax.swing.JFrame {
 
     private void jPanel8MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel8MouseClicked
         // TODO add your handling code here:
-        Acciones.displayTable(jTable23, "select P.FECHA_PEDIDO, P.id_pedido, P.ESTADO_PEDIDO, c.nombres || ' ' || c.apeliidos nombre\n"
-                + "from pedido P, CLIENTE C\n"
-                + "WHERE P.ID_CLIENTE = C.ID_CLIENTE");
+        busquedaText.setText("Ingresa el nombre del producto, cliente");
+        Acciones.displayTable(jTable23, orderView);
         setUpSportColumn(jTable23, jTable23.getColumnModel().getColumn(2));
 
     }//GEN-LAST:event_jPanel8MouseClicked
@@ -318,6 +328,11 @@ public class MainFrame extends javax.swing.JFrame {
             Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_jPanel10MouseClicked
+
+    private void busquedaTextMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_busquedaTextMousePressed
+        // TODO add your handling code here:
+        busquedaText.setText(null);
+    }//GEN-LAST:event_busquedaTextMousePressed
 
     public void setUpSportColumn(JTable table,
             TableColumn sportColumn) {
@@ -341,17 +356,23 @@ public class MainFrame extends javax.swing.JFrame {
 
         try {
             String id = busquedaText.getText();
-            Acciones.displayTable(jTable23, "select P.FECHA_PEDIDO, P.id_pedido, P.ESTADO_PEDIDO, c.nombres || ' ' || c.apeliidos nombre\n"
-                    + "from pedido P, CLIENTE C\n"
-                    + "WHERE P.ID_CLIENTE = C.ID_CLIENTE AND ID_PEDIDO = '" + id + "'");
+            Acciones.displayTable(jTable23, "(SELECT distinct PE.FECHA_REGISTRO, PE.ID_PEDIDO, PE.ESTADO_PEDIDO,  c.nombres || ' ' || c.apeliidos nombre \n"
+                    + "FROM PEDIDO PE, CLIENTE C, DETALLE_PEDIDOS D, PRODUCTO P\n"
+                    + "WHERE PE.ID_PEDIDO = D.ID_PEDIDO\n"
+                    + "AND C.ID_CLIENTE= PE.ID_CLIENTE\n"
+                    + "AND D.ID_PRODUCTO=P.ID_PRODUCTO\n"
+                    + "AND (lower(p.nombre) like '%"+ id +"%' or p.nombre like '%"+ id +"%' or (c.nombres || ' ' || c.apeliidos) LIKE lower('%"+ id +"%') or (c.nombres || ' ' || c.apeliidos) LIKE '%"+ id +"%' )\n"
+                    + ")");
+
+//            Acciones.displayTable(jTable23, "select P.FECHA_PEDIDO, P.id_pedido, P.ESTADO_PEDIDO, c.nombres || ' ' || c.apeliidos nombre\n"
+//                    + "from pedido P, CLIENTE C\n"
+//                    + "WHERE P.ID_CLIENTE = C.ID_CLIENTE AND ID_PEDIDO = '" + id + "'");
             setUpSportColumn(jTable23, jTable23.getColumnModel().getColumn(2));
 
             int count = jTable23.getModel().getRowCount();
             if (count == 0) {
-                Acciones.generarErrorFrame("El id que ingresaste no existe");
-                Acciones.displayTable(jTable23, "select P.FECHA_PEDIDO, P.id_pedido, P.ESTADO_PEDIDO, c.nombres || ' ' || c.apeliidos nombre\n"
-                        + "from pedido P, CLIENTE C\n"
-                        + "WHERE P.ID_CLIENTE = C.ID_CLIENTE");
+                Acciones.generarErrorFrame("No encontré ninguna coincidencia pipipi");
+                Acciones.displayTable(jTable23, orderView);
                 setUpSportColumn(jTable23, jTable23.getColumnModel().getColumn(2));
             } else {
             }
@@ -397,7 +418,7 @@ public class MainFrame extends javax.swing.JFrame {
 
             DetallePedidosFrame newDetails = new DetallePedidosFrame();
             newDetails.setVisible(true);
-            Acciones.displayTable(newDetails.tablaResumenPedido, "SELECT P.NOMBRE,P.COLOR,P.TALLA,D.CANTIDAD FROM PRODUCTO P,DETALLE_PEDIDOS D,PEDIDO PE\n"
+            Acciones.displayTable(newDetails.tablaResumenPedido, "SELECT P.NOMBRE,P.COLOR,P.TALLA,D.CANTIDAD,D.DP_PRECIO AS PRECIO FROM PRODUCTO P,DETALLE_PEDIDOS D,PEDIDO PE\n"
                     + "WHERE  P.ID_PRODUCTO = D.ID_PRODUCTO\n"
                     + "AND PE.ID_PEDIDO = D.ID_PEDIDO\n"
                     + "AND PE.ID_PEDIDO = '" + id + "'");
@@ -417,13 +438,14 @@ public class MainFrame extends javax.swing.JFrame {
 
         java.sql.Date sqlDate = new Date(dateInicial.getTime());
         java.sql.Date sqlDate2 = new Date(dateFinal.getTime());
-        Acciones.displayTable(jTable23, "select P.FECHA_PEDIDO, P.id_pedido, P.ESTADO_PEDIDO, c.nombres || ' ' || c.apeliidos nombre\n"
+        Acciones.displayTable(jTable23, "select P.FECHA_REGISTRO, P.id_pedido, P.ESTADO_PEDIDO, c.nombres || ' ' || c.apeliidos nombre\n"
                 + "from pedido P, CLIENTE C\n"
                 + "WHERE P.ID_CLIENTE = C.ID_CLIENTE "
-                + "AND fecha_PEDIDO >= TO_DATE('" + sqlDate + "', 'yyyy-MM-dd') AND fecha_PEDIDO < TO_DATE('" + sqlDate2 + "', 'yyyy-MM-dd')");
-         setUpSportColumn(jTable23, jTable23.getColumnModel().getColumn(2));
+                + "AND fecha_REGISTRO >= TO_DATE('" + sqlDate + "', 'yyyy-MM-dd') AND fecha_REGISTRO < TO_DATE('" + sqlDate2 + "', 'yyyy-MM-dd')");
+        setUpSportColumn(jTable23, jTable23.getColumnModel().getColumn(2));
     }
 
+    
     /**
      * @param args the command line arguments
      */

@@ -19,11 +19,19 @@ import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import java.sql.ResultSet;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import javax.swing.JTextField;
 import javax.swing.*;
 import javax.*;
 import javax.swing.table.DefaultTableModel;
 import java.util.Random;
+import sun.security.krb5.JavaxSecurityAuthKerberosAccess;
+import java.text.SimpleDateFormat;
+
+import java.sql.Timestamp;
+import java.text.DateFormat;
+import java.util.Calendar;
 
 /**
  *
@@ -34,11 +42,15 @@ public class DashboardFrme extends javax.swing.JFrame {
     /**
      * Creates new form DashboardFrme
      */
+    String productView = "SELECT ID_PRODUCTO,COLOR,TALLA,PRECIO,NOMBRE FROM PRODUCTO WHERE PRODUCTO_ESTADO IS NOT NULL";
+    String clientView = "SELECT ID_CLIENTE,NOMBRES,APELIIDOS,DIRECCION_VIVVIENDA,EMAIL,DNI FROM CLIENTE WHERE ESTADO_CLIENTE IS NOT NULL";
+
     public DashboardFrme() {
         initComponents();
-
-        Acciones.displayTable(jTable2, "SELECT * FROM CLIENTE");
-        Acciones.displayTable(jTable4, "SELECT * FROM PRODUCTO");
+              
+  
+        Acciones.displayTable(jTable2, clientView);
+        Acciones.displayTable(jTable4, productView);
         addValuesComoboBox();
         addValuesComboBox2();
         Acciones.limpiarTabla(jTable1);
@@ -108,6 +120,10 @@ public class DashboardFrme extends javax.swing.JFrame {
         jLabel27 = new javax.swing.JLabel();
         jScrollPane4 = new javax.swing.JScrollPane();
         jTable4 = new javax.swing.JTable();
+        jPanel24 = new javax.swing.JPanel();
+        jLabel30 = new javax.swing.JLabel();
+        jPanel25 = new javax.swing.JPanel();
+        jLabel31 = new javax.swing.JLabel();
         jPanel8 = new javax.swing.JPanel();
         jPanel15 = new javax.swing.JPanel();
         jLabel21 = new javax.swing.JLabel();
@@ -121,9 +137,9 @@ public class DashboardFrme extends javax.swing.JFrame {
         jLabel28 = new javax.swing.JLabel();
         jComboBox1 = new javax.swing.JComboBox<Cliente>();
         jComboBox2 = new javax.swing.JComboBox<Producto>();
-        jDateChooser2 = new com.toedter.calendar.JDateChooser();
         jPanel21 = new javax.swing.JPanel();
         jLabel29 = new javax.swing.JLabel();
+        jTextField1 = new javax.swing.JTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
 
@@ -307,7 +323,7 @@ public class DashboardFrme extends javax.swing.JFrame {
         ));
         jScrollPane2.setViewportView(jTable2);
 
-        jPanel6.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 50, 640, 490));
+        jPanel6.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 50, 640, 600));
 
         jTabbedPane1.addTab("tab1", jPanel6);
 
@@ -351,7 +367,7 @@ public class DashboardFrme extends javax.swing.JFrame {
         jLabel6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imágenes/agregar.png"))); // NOI18N
         jPanel13.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 50, 50));
 
-        jPanel12.add(jPanel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 400, 50, 50));
+        jPanel12.add(jPanel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 410, 50, 50));
 
         jPanel19.setBackground(new java.awt.Color(255, 255, 255));
         jPanel19.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -364,7 +380,7 @@ public class DashboardFrme extends javax.swing.JFrame {
         jLabel8.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imágenes/Editar.png"))); // NOI18N
         jPanel19.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 50, 50));
 
-        jPanel12.add(jPanel19, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 400, 50, 50));
+        jPanel12.add(jPanel19, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 410, 50, 50));
 
         jPanel20.setBackground(new java.awt.Color(255, 255, 255));
         jPanel20.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -377,9 +393,9 @@ public class DashboardFrme extends javax.swing.JFrame {
         jLabel27.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imágenes/eliminar.png"))); // NOI18N
         jPanel20.add(jLabel27, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 50, 50));
 
-        jPanel12.add(jPanel20, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 400, 50, 50));
+        jPanel12.add(jPanel20, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 410, 50, 50));
 
-        jPanel7.add(jPanel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 60, 250, 490));
+        jPanel7.add(jPanel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 60, 250, 500));
 
         jTable4.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -394,7 +410,51 @@ public class DashboardFrme extends javax.swing.JFrame {
         ));
         jScrollPane4.setViewportView(jTable4);
 
-        jPanel7.add(jScrollPane4, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 80, 600, 450));
+        jPanel7.add(jScrollPane4, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 130, 600, 430));
+
+        jPanel24.setBackground(new java.awt.Color(250, 247, 245));
+        jPanel24.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jPanel24MouseClicked(evt);
+            }
+        });
+
+        jLabel30.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imágenes/modificar.png"))); // NOI18N
+
+        javax.swing.GroupLayout jPanel24Layout = new javax.swing.GroupLayout(jPanel24);
+        jPanel24.setLayout(jPanel24Layout);
+        jPanel24Layout.setHorizontalGroup(
+            jPanel24Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jLabel30)
+        );
+        jPanel24Layout.setVerticalGroup(
+            jPanel24Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jLabel30)
+        );
+
+        jPanel7.add(jPanel24, new org.netbeans.lib.awtextra.AbsoluteConstraints(825, 60, 50, 50));
+
+        jPanel25.setBackground(new java.awt.Color(250, 247, 245));
+        jPanel25.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jPanel25MouseClicked(evt);
+            }
+        });
+
+        jLabel31.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imágenes/TopRegistros.png"))); // NOI18N
+
+        javax.swing.GroupLayout jPanel25Layout = new javax.swing.GroupLayout(jPanel25);
+        jPanel25.setLayout(jPanel25Layout);
+        jPanel25Layout.setHorizontalGroup(
+            jPanel25Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jLabel31)
+        );
+        jPanel25Layout.setVerticalGroup(
+            jPanel25Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jLabel31)
+        );
+
+        jPanel7.add(jPanel25, new org.netbeans.lib.awtextra.AbsoluteConstraints(890, 60, 50, 50));
 
         jTabbedPane1.addTab("tab2", jPanel7);
 
@@ -462,9 +522,6 @@ public class DashboardFrme extends javax.swing.JFrame {
         });
         jPanel15.add(jComboBox2, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 230, 190, -1));
 
-        jDateChooser2.setDateFormatString("dd/MM/yyyy");
-        jPanel15.add(jDateChooser2, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 100, 190, -1));
-
         jPanel21.setBackground(new java.awt.Color(255, 255, 255));
         jPanel21.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -477,6 +534,16 @@ public class DashboardFrme extends javax.swing.JFrame {
         jPanel21.add(jLabel29, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 50, 50));
 
         jPanel15.add(jPanel21, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 350, 50, 50));
+
+        DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        Calendar cal = Calendar.getInstance();
+        System.out.println(dateFormat.format(cal.getTime()));
+        jTextField1.setEditable(false);
+        jTextField1.setBackground(new java.awt.Color(254, 114, 93));
+        jTextField1.setFont(new java.awt.Font("Bahnschrift", 0, 14)); // NOI18N
+        jTextField1.setForeground(new java.awt.Color(255, 255, 255));
+        jTextField1.setText(dateFormat.format(cal.getTime()));
+        jPanel15.add(jTextField1, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 100, 190, -1));
 
         jPanel8.add(jPanel15, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 60, 250, 420));
 
@@ -538,9 +605,10 @@ public class DashboardFrme extends javax.swing.JFrame {
         try {
             // TODO add your handling code here:
 
-            Cliente client = new Cliente(Integer.parseInt(id_clienteText.getText()), nombreClienteText.getText(), apellidoClienteText.getText(), direccionClienteText.getText(), correoClienteText.getText(), Integer.parseInt(dniClienteText.getText()));
+            Cliente client = new Cliente(Integer.parseInt(id_clienteText.getText()), nombreClienteText.getText(), apellidoClienteText.getText(), direccionClienteText.getText(), correoClienteText.getText(),
+                    Integer.parseInt(dniClienteText.getText()), "ACTIVE");
             client.registrarCliente();
-            Acciones.displayTable(jTable2, "SELECT * FROM CLIENTE");
+            Acciones.displayTable(jTable2, clientView);
             addValuesComoboBox();
             Acciones.generarSuccesFrame("Cliente registrado con éxito");
         } catch (Exception ex) {
@@ -552,7 +620,8 @@ public class DashboardFrme extends javax.swing.JFrame {
 
     private void jPanel14MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel14MouseClicked
         // TODO add your handling code here:
-        Acciones.delete(jTable2, "DELETE FROM CLIENTE WHERE ID_CLIENTE = '", "SELECT * FROM CLIENTE");
+        Acciones.delete(jTable2, "UPDATE CLIENTE SET ESTADO_CLIENTE =null WHERE ID_CLIENTE = '", clientView);
+
 
     }//GEN-LAST:event_jPanel14MouseClicked
 
@@ -566,9 +635,10 @@ public class DashboardFrme extends javax.swing.JFrame {
         try {
             // TODO add your handling code here:
 
-            Producto product = new Producto(Integer.parseInt(idProductoText.getText()), colorProductoText.getText(), tallaProductoText.getText(), Integer.parseInt(precioProductoText.getText()), nombreProductoText.getText());
+            Producto product = new Producto(Integer.parseInt(idProductoText.getText()), colorProductoText.getText(), tallaProductoText.getText(), Integer.parseInt(precioProductoText.getText()), nombreProductoText.getText(),
+                    "ACTIVE");
             product.registrarProducto();
-            Acciones.displayTable(jTable4, "SELECT * FROM PRODUCTO");
+            Acciones.displayTable(jTable4, productView);
             addValuesComboBox2();
             Acciones.generarSuccesFrame("Producto registrado con éxito");
 
@@ -584,7 +654,7 @@ public class DashboardFrme extends javax.swing.JFrame {
 
     private void jPanel20MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel20MouseClicked
         // TODO add your handling code here:
-        Acciones.delete(jTable4, "DELETE FROM PRODUCTO WHERE ID_PRODUCTO = '", "SELECT * FROM PRODUCTO");
+        Acciones.delete(jTable4, "UPDATE PRODUCTO SET PRODUCTO_ESTADO = null WHERE ID_PRODUCTO = '", productView);
 
 
     }//GEN-LAST:event_jPanel20MouseClicked
@@ -609,8 +679,6 @@ public class DashboardFrme extends javax.swing.JFrame {
 
         // Creacion del pedido y del detalle pedido
         try {
-
-            Random rand = new Random();
             int a;
             Connection conn = Connect.getConnection();
             String sql1 = "SELECT * from pedido";
@@ -619,18 +687,18 @@ public class DashboardFrme extends javax.swing.JFrame {
             String sql2 = "SELECT max(id_pedido) from pedido";
             PreparedStatement pst2 = conn.prepareStatement(sql2);
             ResultSet rs2 = pst2.executeQuery();
-             rs2.next();
-             int maxId = rs2.getInt(1);
-            
+            rs2.next();
+            int maxId = rs2.getInt(1);
+
             int count = 0;
             while (rs1.next()) {
                 count++;
             }
-            
+
             if (count == 0) {
                 a = 1;
             } else {
-                a = maxId+1;
+                a = maxId + 1;
             }
 
             DefaultTableModel tblModel = (DefaultTableModel) jTable1.getModel();
@@ -639,17 +707,29 @@ public class DashboardFrme extends javax.swing.JFrame {
 
             } else {
 
-                SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-                java.util.Date date = sdf.parse(((JTextField) jDateChooser2.getDateEditor().getUiComponent()).getText());
-                java.sql.Date sqlDate = new Date(date.getTime());
-
-                Pedido order = new Pedido(a, sqlDate, "EN PROCESO", jComboBox1.getItemAt(jComboBox1.getSelectedIndex()).getCodigo());
+                DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+                Calendar cal = Calendar.getInstance();
+                System.out.println(dateFormat.format(cal.getTime()));
+           
+                SimpleDateFormat sdf2 = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+                java.util.Date date2 = sdf2.parse(dateFormat.format(cal.getTime()));
+             
+                java.sql.Date sqlDateNow = new Date(date2.getTime());
+                System.out.println(sqlDateNow);
+              
+                Pedido order = new Pedido(a, jComboBox1.getItemAt(jComboBox1.getSelectedIndex()).getCodigo(), sqlDateNow, "EN PROCESO");
                 order.registrarPedido();
-                for (int i = 0; i < tblModel.getRowCount(); i++) {
-                    DetallePedidos detail = new DetallePedidos(a, Integer.parseInt(tblModel.getValueAt(i, 3).toString()), Integer.parseInt(tblModel.getValueAt(i, 0).toString()));
-                    detail.registrarDetallePedidos();
+                try {
+                    for (int i = 0; i < tblModel.getRowCount(); i++) {
+                        DetallePedidos detail = new DetallePedidos(a, Integer.parseInt(tblModel.getValueAt(i, 0).toString()), Integer.parseInt(tblModel.getValueAt(i, 4).toString()) / Integer.parseInt(tblModel.getValueAt(i, 3).toString()), Integer.parseInt(tblModel.getValueAt(i, 3).toString()));
+                        detail.registrarDetallePedidos();
 
+                    }
+                } catch (Exception e) {
+                    System.out.println("aqui esta el error");
                 }
+
+//                Integer.parseInt(tblModel.getValueAt(i, 4).toString())/Integer.parseInt(tblModel.getValueAt(i, 3).toString())
                 Acciones.generarSuccesFrame("Pedido registrado con éxito");
             }
 
@@ -657,8 +737,6 @@ public class DashboardFrme extends javax.swing.JFrame {
             pst1.close();
             pst2.executeUpdate();
             pst2.close();
-            
-            
 
             conn.close();
         } catch (Exception ex) {
@@ -672,6 +750,21 @@ public class DashboardFrme extends javax.swing.JFrame {
         // TODO add your handling code here:
         Acciones.eliminarFila(jTable1);
     }//GEN-LAST:event_jPanel21MouseClicked
+
+    private void jPanel25MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel25MouseClicked
+        // TODO add your handling code here:
+        Acciones.displayTable(jTable4, "SELECT SUM(TABLA.CANTIDAD)AS CANTIDAD,TABLA.COLOR,TABLA.TALLA, TABLA.PRECIO ,TABLA.NOMBRE\n"
+                + "FROM   (SELECT PRODUCTO.ID_PRODUCTO,PRODUCTO.COLOR,PRODUCTO.TALLA,PRODUCTO.PRECIO,PRODUCTO.NOMBRE,DETALLE_PEDIDOS.CANTIDAD\n"
+                + "        FROM PRODUCTO\n"
+                + "        INNER JOIN DETALLE_PEDIDOS\n"
+                + "        ON PRODUCTO.ID_PRODUCTO = DETALLE_PEDIDOS.ID_PRODUCTO)  TABLA\n"
+                + "GROUP BY TABLA.id_producto,TABLA.COLOR,TABLA.TALLA,TABLA.PRECIO,TABLA.NOMBRE ORDER BY CANTIDAD DESC");
+    }//GEN-LAST:event_jPanel25MouseClicked
+
+    private void jPanel24MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel24MouseClicked
+        // TODO add your handling code here:
+        Acciones.displayTable(jTable4, productView);
+    }//GEN-LAST:event_jPanel24MouseClicked
 
     int fila;
 
@@ -705,14 +798,14 @@ public class DashboardFrme extends javax.swing.JFrame {
         try {
             jComboBox1.removeAllItems();
             Connection conn = Connect.getConnection();
-            String sql = "SELECT * FROM CLIENTE";
+            String sql = "SELECT * FROM CLIENTE WHERE ESTADO_CLIENTE IS NOT NULL";
             PreparedStatement pst = conn.prepareStatement(sql);
 
             ResultSet rs = pst.executeQuery();
             while (rs.next()) {
 
                 jComboBox1.addItem(
-                        new Cliente(Integer.parseInt(rs.getString("ID_CLIENTE")), rs.getString("NOMBRES"), rs.getString("APELIIDOS"), rs.getString("DIRECCION_VIVVIENDA"), rs.getString("EMAIL"), Integer.parseInt(rs.getString("DNI"))));
+                        new Cliente(Integer.parseInt(rs.getString("ID_CLIENTE")), rs.getString("NOMBRES"), rs.getString("APELIIDOS"), rs.getString("DIRECCION_VIVVIENDA"), rs.getString("EMAIL"), Integer.parseInt(rs.getString("DNI")), rs.getString("ESTADO_CLIENTE")));
             }//end while
             pst.executeUpdate();
             pst.close();
@@ -726,13 +819,13 @@ public class DashboardFrme extends javax.swing.JFrame {
         try {
             jComboBox2.removeAllItems();
             Connection conn = Connect.getConnection();
-            String sql = "SELECT * FROM PRODUCTO";
+            String sql = "SELECT * FROM PRODUCTO WHERE PRODUCTO_ESTADO IS NOT NULL";
             PreparedStatement pst = conn.prepareStatement(sql);
             ResultSet rs = pst.executeQuery();
             while (rs.next()) {
 
                 jComboBox2.addItem(
-                        new Producto(Integer.parseInt(rs.getString("ID_PRODUCTO")), rs.getString("COLOR"), rs.getString("TALLA"), Integer.parseInt(rs.getString("PRECIO")), rs.getString("NOMBRE")));
+                        new Producto(Integer.parseInt(rs.getString("ID_PRODUCTO")), rs.getString("COLOR"), rs.getString("TALLA"), Integer.parseInt(rs.getString("PRECIO")), rs.getString("NOMBRE"), rs.getString("PRODUCTO_ESTADO")));
             }//end while
 
             pst.executeUpdate();
@@ -760,7 +853,7 @@ public class DashboardFrme extends javax.swing.JFrame {
             String sql = "UPDATE CLIENTE SET NOMBRES='" + nom + "',APELIIDOS = '" + ape + "',DIRECCION_VIVVIENDA = '" + dir + "',EMAIL ='" + ema + "',DNI ='" + dni + "' WHERE ID_CLIENTE ='" + id + "'";
             PreparedStatement pst = conn.prepareStatement(sql);
             ResultSet rs = pst.executeQuery();
-            Acciones.displayTable(jTable2, "SELECT * FROM CLIENTE");
+            Acciones.displayTable(jTable2, clientView);
             pst.executeUpdate();
             pst.close();
             conn.close();
@@ -786,7 +879,7 @@ public class DashboardFrme extends javax.swing.JFrame {
             String sql = "UPDATE PRODUCTO SET COLOR='" + col + "',TALLA = '" + tal + "',PRECIO = '" + pre + "',NOMBRE ='" + nom + "' WHERE ID_PRODUCTO ='" + id + "'";
             PreparedStatement pst = conn.prepareStatement(sql);
             ResultSet rs = pst.executeQuery();
-            Acciones.displayTable(jTable4, "SELECT * FROM PRODUCTO");
+            Acciones.displayTable(jTable4, productView);
             pst.executeUpdate();
             pst.close();
             conn.close();
@@ -812,16 +905,13 @@ public class DashboardFrme extends javax.swing.JFrame {
 
             } else {
                 model.setValueAt(Integer.parseInt(model.getValueAt(fila, 3).toString()) + Integer.parseInt(cantidadPedidoText.getText()), fila, 3);
+                model.setValueAt(((Integer.parseInt(model.getValueAt(fila, 3).toString()))*jComboBox2.getItemAt(jComboBox2.getSelectedIndex()).getPrecio()), fila, 4);
 
             }
 
         } catch (Exception e) {
             Acciones.generarErrorFrame("Ingresa un valor correcto");
         }
-
-    }
-
-    private void combinarPorId() {
 
     }
 
@@ -871,7 +961,6 @@ public class DashboardFrme extends javax.swing.JFrame {
     private javax.swing.JTextField id_clienteText;
     private javax.swing.JComboBox<Cliente> jComboBox1;
     private javax.swing.JComboBox<Producto> jComboBox2;
-    private com.toedter.calendar.JDateChooser jDateChooser2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -895,6 +984,8 @@ public class DashboardFrme extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel28;
     private javax.swing.JLabel jLabel29;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel30;
+    private javax.swing.JLabel jLabel31;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
@@ -915,6 +1006,8 @@ public class DashboardFrme extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel20;
     private javax.swing.JPanel jPanel21;
+    private javax.swing.JPanel jPanel24;
+    private javax.swing.JPanel jPanel25;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
@@ -929,6 +1022,7 @@ public class DashboardFrme extends javax.swing.JFrame {
     private javax.swing.JTable jTable1;
     private javax.swing.JTable jTable2;
     private javax.swing.JTable jTable4;
+    private javax.swing.JTextField jTextField1;
     private javax.swing.JTextField nombreClienteText;
     private javax.swing.JTextField nombreProductoText;
     private javax.swing.JTextField precioProductoText;

@@ -19,13 +19,15 @@ public class Producto {
     private String talla;
     private int precio;
     private String nombre;
+    private String status;
 
-    public Producto(int codigo, String color, String talla, int precio, String nombre) {
+    public Producto(int codigo, String color, String talla, int precio, String nombre,String status) {
         this.codigo = codigo;
         this.color = color;
         this.talla = talla;
         this.precio = precio;
         this.nombre = nombre;
+        this.status = status;
     }
 
     public int getCodigo() {
@@ -67,6 +69,14 @@ public class Producto {
     public void setNombre(String nombre) {
         this.nombre = nombre;
     }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
     
     public String toString(){
         return nombre;
@@ -75,13 +85,14 @@ public class Producto {
     //INSERT
     public void registrarProducto() throws Exception{
         Connection conn = Connect.getConnection();
-        String sql = "INSERT INTO PRODUCTO VALUES(?, ?, ?, ?, ? )";
+        String sql = "INSERT INTO PRODUCTO VALUES(?, ?, ?, ?, ?, ? )";
         PreparedStatement pst = conn.prepareStatement(sql);
         pst.setInt(1, this.codigo);
         pst.setString(2, this.color);
         pst.setString(3, this.talla);
         pst.setInt(4, this.precio);
         pst.setString(5, this.nombre);
+        pst.setString(6, this.status);
         pst.executeUpdate();
         pst.close();
         conn.close();

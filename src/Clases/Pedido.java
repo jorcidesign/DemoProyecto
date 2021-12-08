@@ -7,6 +7,7 @@ package Clases;
 
 import Conexiones.Connect;
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -18,15 +19,16 @@ public class Pedido {
     
     
     private int codigo;
-    private java.sql.Date fecha;
+
     private String estado;
+    private java.sql.Date registro;
     private int codigocliente;
 
-    public Pedido(int codigo, java.sql.Date fecha, String estado, int codigocliente) {
+    public Pedido(int codigo,int codigocliente, java.sql.Date registro, String estado) {
         this.codigo = codigo;
-        this.fecha = fecha;
         this.estado = estado;
         this.codigocliente = codigocliente;
+        this.registro = registro;
     }
 
     public int getCodigo() {
@@ -35,14 +37,6 @@ public class Pedido {
 
     public void setCodigo(int codigo) {
         this.codigo = codigo;
-    }
-
-    public java.sql.Date getFecha() {
-        return fecha;
-    }
-
-    public void setFecha(java.sql.Date fecha) {
-        this.fecha = fecha;
     }
 
     public String getEstado() {
@@ -61,6 +55,14 @@ public class Pedido {
         this.codigocliente = codigocliente;
     }
 
+    public Date getRegistro() {
+        return registro;
+    }
+
+    public void setRegistro(Date registro) {
+        this.registro = registro;
+    }
+
    
     
     
@@ -69,9 +71,9 @@ public class Pedido {
         String sql = "INSERT INTO PEDIDO VALUES(?, ?, ?, ? )";
         PreparedStatement pst = conn.prepareStatement(sql);
         pst.setInt(1, this.codigo);
-        pst.setDate(2, this.fecha);
-        pst.setString(3, this.estado);
-        pst.setInt(4, this.codigocliente);
+        pst.setInt(2,this.codigocliente);
+        pst.setDate(3, this.registro);
+        pst.setString(4, this.estado);
         pst.executeUpdate();
         pst.close();
         conn.close();
